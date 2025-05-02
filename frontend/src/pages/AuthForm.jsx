@@ -38,14 +38,18 @@ const AuthForm = () => {
     if (isLogin) {
       const response = await axios.post(
         "http://localhost:3000/api/user/login",
-        loginCredentials
+        loginCredentials, {
+          withCredentials: true
+        }
       );
       console.log(response);
       localStorage.setItem("token", response.data.token); 
     } else {
       const response = await axios.post(
         "http://localhost:3000/api/user/register",
-        registerationCredentials
+        registerationCredentials, {
+          withCredentials: true 
+        }
       );
       console.log(response);
     }
