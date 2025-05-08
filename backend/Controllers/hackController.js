@@ -1,12 +1,44 @@
 const Hackathon = require("../models/hackModel");
 const cloudinary = require("cloudinary").v2;
+const User = require("../models/userModel");
 
+const hackRegister = async (req, res) => {
+  const { hackId } = req.body;
+  const userId = req.user._id;
+  console.log(userId)
 
+  const user = await User.findById(userId);
+  user.hacks.push(hackId);
+  await user.save();
+
+  const hack = await Hackathon.findById(hackId);
+  hack.users.push(userId);
+  await hack.save();
+
+  res.status(200).send("hackathon registeration succssful");
+};
+
+const cancelRegister = async (req,res)=>{
+  const { hackId } = req.body;
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+  const newHacks = user.hacks.filter((item)=>item !== hackId)
+  user.hacks = newHacks;
+  await user.save();
+  
+  const hack = await Hackathon.findById(hackId);
+  const newUsers = hack.users.filter((item)=>item !== userId)
+  hack.users = newUsers;
+  await hack.save();
+
+  res.status(200).send("hackathon registeration succssful");
+}
 const getIndividualHack = async (req, res) => {
-  const hackId = req.params.hackId
-  console.log(hackId)
+  const hackId = req.params.hackId;
+  console.log(hackId);
   const response = await Hackathon.findById(hackId);
-  console.log(response)
+  console.log(response);
   res.status(200).send(response);
 };
 const getHackathon = async (req, res) => {
@@ -65,6 +97,7 @@ const addHackathon = async (req, res) => {
         res.status(200).send("Data is stored");
       })
       .catch((err) => {
+        console.log(err)
         console.log("Something Error Occured");
         res.status(400).send("Something Error Occurred");
       });
@@ -74,4 +107,9 @@ const addHackathon = async (req, res) => {
   }
 };
 
-module.exports = { addHackathon, getHackathon, getIndividualHack };
+module.exports = {
+  addHackathon,
+  getHackathon,
+  getIndividualHack,
+  hackRegister,
+};

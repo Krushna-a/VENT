@@ -4,7 +4,7 @@ const AuthForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [isLogin, setIsLogin] = useState(true);
 
   const [activeField, setActiveField] = useState(null);
@@ -38,14 +38,17 @@ const AuthForm = () => {
     if (isLogin) {
       const response = await axios.post(
         "http://localhost:3000/api/user/login",
-        loginCredentials
+        loginCredentials,
+        { withCredentials: true }
       );
       console.log(response);
-      localStorage.setItem("token", response.data.token); 
+      // localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user-id", response.data.user.id);
     } else {
       const response = await axios.post(
         "http://localhost:3000/api/user/register",
-        registerationCredentials
+        registerationCredentials,
+        { withCredentials: true }
       );
       console.log(response);
     }

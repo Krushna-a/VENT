@@ -3,6 +3,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
+  hacks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Hack", required: false }],
 });
 
 userSchema.plugin(passportLocalMongoose);

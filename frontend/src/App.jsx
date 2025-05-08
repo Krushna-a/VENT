@@ -12,6 +12,7 @@ import HostHack from './pages/HostHack'
 import Profile from './pages/Profile'
 import AuthForm from './pages/AuthForm'
 import Protected from './pages/Protected'
+import RegisterHack from './pages/RegisterHack'
 
 const App = () => {
   return (
@@ -28,6 +29,8 @@ const App = () => {
         <Route path="/user/:mode" element={<AuthForm />}></Route>
         <Route path="/user/profile" element={<Profile />}></Route>
         <Route path="/protected" element={<Protected />}></Route>
+        <Route path="/hackathons/:hackId/register" element={<RegisterHack />}></Route>
+        
       </Routes>
       <Footer></Footer>
     </div>

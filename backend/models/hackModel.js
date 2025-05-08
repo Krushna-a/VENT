@@ -9,12 +9,12 @@ const formSchema = new mongoose.Schema(
       enum: ["Online", "In-Person"],
       required: true,
     },
-    organisedBy: { type: String},
-    customLocation: { type: String},
+    organisedBy: { type: String },
+    customLocation: { type: String },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     registrationDeadline: { type: Date, required: true },
-    eligibility:[String],
+    eligibility: [String],
     teamSize: {
       type: String,
       enum: ["Individual", "Team"],
@@ -38,6 +38,10 @@ const formSchema = new mongoose.Schema(
     website: { type: String, default: "" },
     contactEmail: { type: String, required: true },
     rules: [String],
+    users: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }],
   },
   { timestamps: true }
 );

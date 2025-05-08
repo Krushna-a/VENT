@@ -10,6 +10,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/userModel");
 const userRouter = require("./Routes/user.routes");
 const hackRouter = require("./Routes/hackathon");
+const MongoStore = require("connect-mongo")
 
 app.use(cors({
   origin: "http://localhost:5173",
@@ -37,6 +38,10 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: false,
+  store: new MongoStore({
+    mongoUrl: process.env.MONGO_URI,
+    ttl: 14 * 24 * 60 * 60
+  }),
   cookie: {
     httpOnly: true,
     secure: false, // Set to true if using HTTPS

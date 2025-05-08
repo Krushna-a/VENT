@@ -15,6 +15,7 @@ import {
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CommentSection from "../components/CommentSection";
 import IconHeader from "../components/IconHeader";
@@ -24,10 +25,12 @@ import InfoCard from "../components/InfoCard";
 
 const Hackathon = () => {
   const { hackId } = useParams();
+  const navigate = useNavigate();
   const [saved, setSaved] = useState(false);
   const [hackData, setHackData] = useState(null);
   const [isActive, setIsActive] = useState("");
   const [hackTimeline, setHackTimeline] = useState([]);
+  const [isRegisteredToHack, SetIsRegisteredToHack] = useState(false);
 
   const isHackActive = (data) => {
     const now = new Date();
@@ -39,6 +42,11 @@ const Hackathon = () => {
     }
   };
 
+  const registerHandle = () => {
+    const path = `/hackathons/${hackId}/register`;
+    navigate(path);
+  };
+
   const getData = async () => {
     try {
       const { data } = await axios.get(
@@ -47,6 +55,12 @@ const Hackathon = () => {
       setHackData(data);
       setHackTimeline(data.timeline);
       isHackActive(data);
+      const registeredUserId = localStorage.getItem("user-id");
+      const userIds = data.users.map((userId) => userId.toString());
+
+      if (userIds.some((id) => id === registeredUserId)) {
+        SetIsRegisteredToHack(true);
+      }
     } catch (error) {
       console.error("Error fetching hackathon data:", error);
     }
@@ -82,7 +96,6 @@ const Hackathon = () => {
   const toggleSave = () => {
     setSaved(!saved);
   };
-
   useEffect(() => {
     getData();
   }, []);
@@ -197,8 +210,27 @@ const Hackathon = () => {
                   {saved ? "Saved" : "Save"}
                 </button>
               </div>
-              <button className="w-full bg-white text-blue-600 hover:bg-blue-100 font-bold py-3 px-4 rounded-lg text-lg transition-all shadow-md hover:shadow-lg">
-                Register Now
+              <button
+                className={`
+                  w-full py-3 px-6 rounded-lg
+                  font-medium text-white
+                  transition-colors duration-200
+                  ${
+                    isRegisteredToHack
+                      ? "bg-red-500 hover:bg-red-600"
+                      : "bg-blue-500 hover:bg-blue-600"
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-offset-2
+                  ${
+                    isRegisteredToHack
+                      ? "focus:ring-red-300"
+                      : "focus:ring-blue-300"
+                  }
+                  shadow-sm hover:shadow-md
+                `}
+                onClick={registerHandle}
+              >
+                {isRegisteredToHack ? "Cancel Registration" : "Register Now"}
               </button>
               <p className="text-blue-200 text-sm mt-3 text-center">
                 Registration closes{" "}
@@ -282,7 +314,10 @@ const Hackathon = () => {
                 {saved ? "Saved" : "Save"}
               </button>
             </div>
-            <button className="w-full bg-white text-blue-600 hover:bg-blue-100 font-bold py-3 px-4 rounded-lg text-lg transition-all shadow-md hover:shadow-lg">
+            <button
+              className="w-full bg-white text-blue-600 hover:bg-blue-100 font-bold py-3 px-4 rounded-lg text-lg transition-all shadow-md hover:shadow-lg"
+              onClick={registerHandle}
+            >
               Register Now
             </button>
             <p className="text-blue-200 text-sm mt-3 text-center">

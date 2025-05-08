@@ -17,36 +17,20 @@ const editProfile = async (req, res) => {
   } = req.body;
 
   try {
-    // if (!req.isAuthenticated()) {
-    //   return res.status(401).json({ message: "Not authenticated" });
-    // }
-    console.log("Authenticated user:", req.user)
-    console.log(
-      fullName,
-      location,
-      course,
-      college,
-      graduatingYear,
-      "courseduration   ",
-      courseDuration,
-      "   gender   ",
-      gender
-    );
-
+    
     const userId = req.user._id;
     const currUser = await User.findById(userId);
     const email = currUser.email;
 
     const profile = await Profile.findOne({ userId: userId });
-
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+    let imageUrl = null;
+    if (req.file) {
+      const uploadedImg = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = uploadedImg.secure_url;
     }
 
-    const uploadedImg = await cloudinary.uploader.upload(req.file.path);
-    const imageUrl = uploadedImg.secure_url;
 
-    const profileDetails = {
+    let profileDetails = {
       fullName,
       location,
       course,
@@ -56,9 +40,11 @@ const editProfile = async (req, res) => {
       gender,
       email,
       userId,
-      profileImage: imageUrl,
     };
-
+    console.log(imageUrl)
+    if(imageUrl){
+      profileDetails = {...profileDetails,profileImage:imageUrl}
+    }
     const cleanedData = Object.fromEntries(
       Object.entries(profileDetails).filter(
         ([_, value]) => value !== "" && value !== undefined && value !== null
@@ -76,8 +62,9 @@ const editProfile = async (req, res) => {
 
       if (!updatedProfile) {
         console.log("Profile not found");
-        return null;
-      }
+        return res.status(400)
+      };
+      return res.status(201).json(updatedProfile);
     } else {
       const newProfile = new Profile(cleanedData);
 
