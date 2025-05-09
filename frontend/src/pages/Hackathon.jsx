@@ -47,6 +47,29 @@ const Hackathon = () => {
     navigate(path);
   };
 
+  const cancelRegister = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/hack/cancel",
+        { hackId }, // Send as an object
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const handleSubmit = () => {
+    if (isRegisteredToHack) {
+      cancelRegister();
+    } else {
+      registerHandle();
+    }
+  };
+
   const getData = async () => {
     try {
       const { data } = await axios.get(
@@ -228,7 +251,7 @@ const Hackathon = () => {
                   }
                   shadow-sm hover:shadow-md
                 `}
-                onClick={registerHandle}
+                onClick={handleSubmit}
               >
                 {isRegisteredToHack ? "Cancel Registration" : "Register Now"}
               </button>
