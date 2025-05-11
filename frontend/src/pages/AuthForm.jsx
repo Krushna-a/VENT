@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef,useContext } from "react";
 import axios from "axios";
+import { HackContext } from "../../context/HackContext";
 const AuthForm = () => {
+  const { notify } = useContext(HackContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +44,7 @@ const AuthForm = () => {
         { withCredentials: true }
       );
       console.log(response);
+      notify(response.data.message)
       // localStorage.setItem("token", response.data.token);
       localStorage.setItem("user-id", response.data.user.id);
     } else {
@@ -51,6 +54,7 @@ const AuthForm = () => {
         { withCredentials: true }
       );
       console.log(response);
+      notify(response.data.message)
     }
   };
 

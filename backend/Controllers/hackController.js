@@ -7,13 +7,19 @@ const hackRegister = async (req, res) => {
   const userId = req.user._id;
   console.log(userId);
 
+  const hack = await Hackathon.findById(hackId);
+  const exists = hack.users.some((item) =>{
+    return item.toString() !== userId;
+  })
+  if(exists){
+    res.send("Already Registered")
+  }
+  hack.users.push(userId);
+  await hack.save();
+
   const user = await User.findById(userId);
   user.hacks.push(hackId);
   await user.save();
-
-  const hack = await Hackathon.findById(hackId);
-  hack.users.push(userId);
-  await hack.save();
 
   res.status(200).send("hackathon registeration succssful");
 };

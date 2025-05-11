@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { createContext } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 export const HackContext = createContext();
 
@@ -25,6 +26,8 @@ const HackContextProvider = (props) => {
   const [contactEmail, setContactEmail] = useState("");
   const [rules, setRules] = useState([""]);
   const [eligibility, setEligibility] = useState([""]);
+
+  const notify = (msg) => toast(msg);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,6 +75,8 @@ const HackContextProvider = (props) => {
     eligibility,
     setEligibility,
     handleChange,
+    ToastContainer,
+    notify
   };
 
   return (

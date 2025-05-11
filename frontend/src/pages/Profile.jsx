@@ -11,18 +11,26 @@ import axios from "axios";
 import ProfileForm from "../components/ProfileForm";
 
 const Profile = () => {
+  const currentYear = new Date().getFullYear();
   const token = localStorage.getItem("token");
+  const [userData, setUserData] = useState({});
 
   const [isOpen, setIsOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const modalRef = useRef(null);
 
   const [showEditForm, setShowEditForm] = useState(false);
+  const userProfile = async () => {
+    const data = await axios.get("http://localhost:3000/api/user/profile", {
+      withCredentials: true,
+    });
 
+    setUserData(data.data.profile);
+  };
   // yaha par handle submit me profile pic update ka function likhna h
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let profileData ={};
+    let profileData = {};
     if (profileImage) {
       profileData = {
         profileImage,
@@ -67,6 +75,11 @@ const Profile = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    userProfile();
+    console.log(userData);
+  }, []);
 
   const handleFileChange = (event) => {
     setProfileImage(event.target.files[0]);
@@ -158,7 +171,12 @@ const Profile = () => {
             <div className="p-6 md:p-8 flex flex-col items-center md:items-start">
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                  src={`${
+                    userData.profileImage
+                      ? userData.profileImage
+                      : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+                  }`}
+                  // src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
                   alt="Profile"
                   className="h-32 w-32 sm:h-40 sm:w-40 object-cover rounded-full border-4 border-white shadow-lg"
                 />
@@ -188,8 +206,18 @@ const Profile = () => {
             <div className="p-6 md:p-8 flex-1">
               <div className="flex flex-col space-y-4">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-800">Krushna</h2>
-                  <p className="text-blue-600 font-medium">3rd Year Student</p>
+                  <h2 className="text-3xl font-bold text-gray-800">
+                    {userData.fullName}
+                  </h2>
+                  <p className="text-blue-600 font-medium">
+                    {{
+                      1: "1st",
+                      2: "2nd",
+                      3: "3rd",
+                      4: "Final",
+                    }[userData.graduatingYear - currentYear] || "-"}{" "}
+                    Year Student
+                  </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-center space-x-3">
@@ -201,7 +229,7 @@ const Profile = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">University</p>
-                      <p className="font-medium">VIT Pune</p>
+                      <p className="font-medium">{userData.college}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -213,7 +241,7 @@ const Profile = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Degree</p>
-                      <p className="font-medium">B.Tech Computer Science</p>
+                      <p className="font-medium">{userData.course}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -222,7 +250,7 @@ const Profile = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Graduation Year</p>
-                      <p className="font-medium">2025</p>
+                      <p className="font-medium">{userData.graduatingYear}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -234,7 +262,7 @@ const Profile = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Location</p>
-                      <p className="font-medium">Pune, India</p>
+                      <p className="font-medium">{userData.location}</p>
                     </div>
                   </div>
                 </div>

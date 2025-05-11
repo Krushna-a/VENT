@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -22,8 +22,10 @@ import IconHeader from "../components/IconHeader";
 import TimelineItem from "../components/TimelineItem";
 import PrizeCard from "../components/PrizeCard";
 import InfoCard from "../components/InfoCard";
+import { HackContext } from "../../context/HackContext";
 
 const Hackathon = () => {
+  const {notify} = useContext(HackContext)
   const { hackId } = useParams();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(false);
@@ -57,6 +59,9 @@ const Hackathon = () => {
         }
       );
       console.log(res)
+      notify(res.data)
+      SetIsRegisteredToHack(false)
+      console.log(isRegisteredToHack)
     } catch (error) {
       console.log(error)
     }
@@ -337,12 +342,29 @@ const Hackathon = () => {
                 {saved ? "Saved" : "Save"}
               </button>
             </div>
+           
             <button
-              className="w-full bg-white text-blue-600 hover:bg-blue-100 font-bold py-3 px-4 rounded-lg text-lg transition-all shadow-md hover:shadow-lg"
-              onClick={registerHandle}
-            >
-              Register Now
-            </button>
+                className={`
+                  w-full py-3 px-6 rounded-lg
+                  font-medium text-white
+                  transition-colors duration-200
+                  ${
+                    isRegisteredToHack
+                      ? "bg-red-500 hover:bg-red-600"
+                      : "bg-blue-500 hover:bg-blue-600"
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-offset-2
+                  ${
+                    isRegisteredToHack
+                      ? "focus:ring-red-300"
+                      : "focus:ring-blue-300"
+                  }
+                  shadow-sm hover:shadow-md
+                `}
+                onClick={handleSubmit}
+              >
+                {isRegisteredToHack ? "Cancel Registration" : "Register Now"}
+              </button>
             <p className="text-blue-200 text-sm mt-3 text-center">
               Registration closes{" "}
               <span className="font-bold">
