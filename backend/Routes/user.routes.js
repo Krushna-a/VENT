@@ -33,7 +33,7 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
-    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+    if (!user) return res.json({ message: "Invalid credentials" });
 
     req.logIn(user, (err) => {
       if (err) return next(err);
@@ -44,6 +44,7 @@ userRouter.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
 
 userRouter.post("/logout", logOut);
 userRouter.get("/profile", requireAuth, getProfile);

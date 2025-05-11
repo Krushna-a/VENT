@@ -3,8 +3,24 @@ const User = require("../models/userModel");
 const Profile = require("../models/profileModel");
 const cloudinary = require("cloudinary").v2;
 const jwt = require("jsonwebtoken");
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 
-const getProfile = async (req, res) => {};
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user._id; // The logged-in user's ID
+    const profile = await Profile.findOne({ userId: userId });
+    
+    if (!profile) {
+      return res.status(404).send({ message: "Profile not found for this user" });
+    }
+    
+    res.send({ message: "User profile", profile });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send({ message: "Error fetching profile" });
+  }
+};
 const editProfile = async (req, res) => {
   const {
     fullName,
@@ -17,7 +33,6 @@ const editProfile = async (req, res) => {
   } = req.body;
 
   try {
-    
     const userId = req.user._id;
     const currUser = await User.findById(userId);
     const email = currUser.email;
@@ -28,7 +43,6 @@ const editProfile = async (req, res) => {
       const uploadedImg = await cloudinary.uploader.upload(req.file.path);
       imageUrl = uploadedImg.secure_url;
     }
-
 
     let profileDetails = {
       fullName,
@@ -41,9 +55,9 @@ const editProfile = async (req, res) => {
       email,
       userId,
     };
-    console.log(imageUrl)
-    if(imageUrl){
-      profileDetails = {...profileDetails,profileImage:imageUrl}
+    console.log(imageUrl);
+    if (imageUrl) {
+      profileDetails = { ...profileDetails, profileImage: imageUrl };
     }
     const cleanedData = Object.fromEntries(
       Object.entries(profileDetails).filter(
@@ -62,8 +76,8 @@ const editProfile = async (req, res) => {
 
       if (!updatedProfile) {
         console.log("Profile not found");
-        return res.status(400)
-      };
+        return res.status(400);
+      }
       return res.status(201).json(updatedProfile);
     } else {
       const newProfile = new Profile(cleanedData);
@@ -82,12 +96,16 @@ const editProfile = async (req, res) => {
 };
 
 const loginUser = (req, res) => {
-  return res.json({
-    message: "Logged in successfully",
-    user: {
-      id: req.user._id,
-    },
-  });
+  try {
+    return res.json({
+      message: "Logged in successfully",
+      user: {
+        id: req.user._id,
+      },
+    });
+  } catch (error) {
+    res.json(error.message);
+  }
 };
 
 const logOut = (req, res, next) => {
@@ -100,12 +118,18 @@ const logOut = (req, res, next) => {
 const registerUser = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
+
+    const existingUserByEmail = await User.findOne({ email });
+    const existingUserByUserName = await User.findOne({ username });
+    if (existingUserByEmail || existingUserByUserName) {
+      return res.json({ message: "User already exists" });
+    }
     const newUser = new User({ username, email });
     const registeredUser = await User.register(newUser, password);
 
     req.login(registeredUser, (err) => {
       if (err) return next(err);
-      res.status(200).send("User Registered successfully");
+      res.status(200).send({ message: "User registerd successfully" });
     });
   } catch (err) {
     console.error("Registration error:", err);

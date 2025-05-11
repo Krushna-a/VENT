@@ -5,35 +5,54 @@ const User = require("../models/userModel");
 const hackRegister = async (req, res) => {
   const { hackId } = req.body;
   const userId = req.user._id;
-  console.log(userId)
+  console.log(userId);
+
+  const hack = await Hackathon.findById(hackId);
+  const exists = hack.users.some((item) =>{
+    return item.toString() !== userId;
+  })
+  if(exists){
+    res.send("Already Registered")
+  }
+  hack.users.push(userId);
+  await hack.save();
 
   const user = await User.findById(userId);
   user.hacks.push(hackId);
   await user.save();
 
-  const hack = await Hackathon.findById(hackId);
-  hack.users.push(userId);
-  await hack.save();
-
   res.status(200).send("hackathon registeration succssful");
 };
 
-const cancelRegister = async (req,res)=>{
-  const { hackId } = req.body;
-  const userId = req.user._id;
+const cancelRegister = async (req, res) => {
+  try {
+    const { hackId } = req.body;
+    console.log("hackId:", hackId);
+    const userId = req.user._id;
 
-  const user = await User.findById(userId);
-  const newHacks = user.hacks.filter((item)=>item !== hackId)
-  user.hacks = newHacks;
-  await user.save();
-  
-  const hack = await Hackathon.findById(hackId);
-  const newUsers = hack.users.filter((item)=>item !== userId)
-  hack.users = newUsers;
-  await hack.save();
+    const user = await User.findById(userId);
+    const newHacks = user.hacks.filter((item) => {
+      console.log("hack", item);
+      return item.toString() !== hackId;
+    });
+    user.hacks = newHacks;
+    await user.save();
 
-  res.status(200).send("hackathon registeration succssful");
-}
+    const hack = await Hackathon.findById(hackId);
+    const newUsers = hack.users.filter((item) => {
+      console.log("user", item);
+      return item.toString() !== userId.toString();
+    });
+    hack.users = newUsers;
+    await hack.save();
+
+    res.status(200).send("Hackathon registration canceled");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+};
+
 const getIndividualHack = async (req, res) => {
   const hackId = req.params.hackId;
   console.log(hackId);
@@ -97,7 +116,7 @@ const addHackathon = async (req, res) => {
         res.status(200).send("Data is stored");
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         console.log("Something Error Occured");
         res.status(400).send("Something Error Occurred");
       });
@@ -112,4 +131,5 @@ module.exports = {
   getHackathon,
   getIndividualHack,
   hackRegister,
+  cancelRegister,
 };
