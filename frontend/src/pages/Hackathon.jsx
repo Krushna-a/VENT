@@ -133,7 +133,7 @@ const Hackathon = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-10 px-4 md:px-10">
+    <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-10 px-4 md:px-2">
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
         {/* Banner */}
         <div className="relative rounded-2xl overflow-hidden shadow-xl h-[250px] md:h-[400px]">

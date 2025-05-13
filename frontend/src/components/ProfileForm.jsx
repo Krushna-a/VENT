@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { HackContext } from "../../context/HackContext";
 
 const ProfileForm = ({ showEditForm = true }) => {
   const navigate = useNavigate();
-    const {notify} = useContext(HackContext)
+  const { notify } = useContext(HackContext);
   const [fullName, setFullName] = useState("");
   const [location, setLocation] = useState("");
   const [course, setCourse] = useState("");
@@ -17,9 +17,9 @@ const ProfileForm = ({ showEditForm = true }) => {
   const { hackId } = useParams();
 
   const handleSubmit = async (e) => {
-    console.log("not refreshed")
+    console.log("not refreshed");
     e.preventDefault();
-    console.log("refreshed")
+    console.log("refreshed");
 
     if (hackId) {
       console.log(hackId);
@@ -31,12 +31,10 @@ const ProfileForm = ({ showEditForm = true }) => {
           withCredentials: true,
         }
       );
-      
 
       console.log(res.data);
-      notify(res.data)
-      navigate(`/hackathons/${hackId}`)
-
+      notify(res.data.message);
+      navigate(`/hackathons/${hackId}`);
     } else {
       const profileData = {
         fullName,
@@ -60,10 +58,11 @@ const ProfileForm = ({ showEditForm = true }) => {
       );
 
       console.log(res.data);
+      notify(res.data.message);
     }
   };
   return (
-    <div className="w-full flex justify-center my-5">
+    <div className="w-full flex justify-center my-5 ">
       <form
         onSubmit={handleSubmit}
         className={`${

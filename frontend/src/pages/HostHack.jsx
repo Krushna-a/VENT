@@ -5,8 +5,11 @@ import Hack3 from "./hackathonComp/Hack3";
 import Hack4 from "./hackathonComp/Hack4";
 import { HackContext } from "../../context/HackContext";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const HostHack = () => {
+  const navigate = useNavigate();
+  const { notify } = useContext(HackContext);
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -16,8 +19,7 @@ const HostHack = () => {
 
   const prevStep = () => setCurrentStep((prev) => prev - 1);
 
- 
- const {
+  const {
     title,
     description,
     location,
@@ -55,7 +57,7 @@ const HostHack = () => {
     website,
     contactEmail,
     rules,
-  }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -67,15 +69,21 @@ const HostHack = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true,
         }
       );
       console.log("Hackathon added:", res.data);
+      notify(res.data)
+      if(res.data){
+        navigate('/Hackathons');
+      }
     } catch (error) {
       console.error("Error submitting hackathon:", error);
+      notify(res.data)
     }
   };
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 sm:pt-24">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">

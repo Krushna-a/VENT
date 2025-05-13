@@ -65,6 +65,7 @@ const getHackathon = async (req, res) => {
   res.status(200).send(allHackathons);
 };
 const addHackathon = async (req, res) => {
+  const hackOwner = req.user._id;
   try {
     const {
       title,
@@ -106,7 +107,14 @@ const addHackathon = async (req, res) => {
       website,
       contactEmail,
       rules,
+      hackOwner
     };
+
+    const isHackExist = await Hackathon.findOne({title:title})
+
+    if(isHackExist){
+      return res.status(200).send("Hack Already Exist");
+    }
 
     const newHackathon = new Hackathon(newData);
     await newHackathon

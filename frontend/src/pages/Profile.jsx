@@ -78,14 +78,13 @@ const Profile = () => {
 
   useEffect(() => {
     userProfile();
-    console.log(userData);
   }, []);
 
   const handleFileChange = (event) => {
     setProfileImage(event.target.files[0]);
   };
   return (
-    <div className="w-full flex items-center my-5 md:my-10 flex-col gap-5 px-4 sm:px-0">
+    <div className="w-full flex items-center my-5 md:my-10 flex-col gap-5 px-4 sm:px-0 pt-24">
       {/* Modal Backdrop */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
