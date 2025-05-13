@@ -78,7 +78,7 @@ const editProfile = async (req, res) => {
         console.log("Profile not found");
         return res.status(400);
       }
-      return res.status(201).json(updatedProfile);
+      return res.status(201).json({message:"User Profile Updated",updatedProfile});
     } else {
       const newProfile = new Profile(cleanedData);
 

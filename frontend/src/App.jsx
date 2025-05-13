@@ -18,7 +18,7 @@ import { HackContext } from "../context/HackContext";
 const App = () => {
   const {ToastContainer, toast} = useContext(HackContext)
   return (
-    <div className="">
+    <div className="bg-[#E8EAEB]">
       <Navbar></Navbar>
       <ToastContainer />
       <Routes>

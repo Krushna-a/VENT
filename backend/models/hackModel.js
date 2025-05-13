@@ -42,6 +42,10 @@ const formSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     }],
+    hackOwner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

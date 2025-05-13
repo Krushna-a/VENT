@@ -14,7 +14,7 @@ const Hackathons = () => {
     getHacks();
   }, []);
   return (
-    <div className="w-full sm:px-40 flex flex-col gap-5 my-10">
+    <div className="w-[100vw] min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-10 px-4 md:px-10 flex flex-col items-center gap-2 pt-28">
       {allHacks.map((hack) => (
         <Hacks hackathon={hack}></Hacks>
       ))}

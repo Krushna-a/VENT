@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,12 +14,26 @@ import {
 const Navbar = () => {
   const [sideBar, setSideBar] = useState(false);
   const [showProfileMenu, setShowProfilMenu] = useState(false);
+
+  useEffect(() => {
+    if (sideBar) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup function to reset overflow when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [sideBar]);
+
   return (
     <>
       <div
         className={`${
           sideBar
-            ? "w-[90%] block transition-all duration-[3000ms] ease-in-out"
+            ? "w-[90%] block transition-all duration-[3000ms] ease-in-out z-[100] overflow-y-auto"
             : "w-0 hidden transition-all duration-[3000ms] ease-in-out"
         } h-screen absolute top-0 left-0 bg-white z-10 flex flex-col gap-5 p-10`}
       >
@@ -46,7 +60,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      <div className="border h-20 w-full flex justify-between items-center px-4 sm:px-10 shadow-md">
+      <div className={`border h-20 w-full flex justify-between items-center px-4 sm:px-10 shadow-md fixed w-full top-0 z-50 bg-white/10 backdrop-blur-sm border-b border-white/10 rounded-full mt-5 border-red-900 ${sideBar ? "hidden" : "flex"}`}>
         <div
           className="block sm:hidden"
           onClick={() => {
@@ -60,10 +74,10 @@ const Navbar = () => {
         {/* Logo */}
         <NavLink to="/" className="h-20 flex items-center">
           <img
-            src="https://media-hosting.imagekit.io/80bc380dc20c4ef6/event-updatewd-logo.png?Expires=1840451502&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=DXTFuvsMBvQtNDq-XbMaaFam8pmtKWJHWLPv6nYgA7wDDCJkz4PThfdBoTQDURzDMgQ6UQ4rFXLNI43u~YUfrwW92xvK4cu6U0284iS9ys5w7keAwyJpwTlRUxFGcOE-MyF9pUE5JhZxAOpmDLlJtej-S4KRm1a7LQnmwlseTJTkEXH6-AF9xBFWv~2G~473a1BlfWAA2eFgULywOZzt2gomaU-TRBQGfRUje-1iABSQdcumAZwP4Eg4D8heuXlo0S0OFAt4~w~Jd28s~VdsJppTlK-UKVtnQQYM7Uko-XBvj3qAiIuY2i4vkH5pa548z8pg2D4nsUrg~uWZxMzRFw__"
-            alt="Logo"
-            className="w-24 sm:w-40 bg-transparent"
-          />
+                src="https://media-hosting.imagekit.io/d8ac7d5ae5f94061/Adobe%20Express%20-%20file.png?Expires=1841749058&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=cK5ZjfP4xwNsuXCLqcIM53Cwl0VHLoscwVdAHwNEiAY4sYsf-K3fH5w3uxAx--Zy0~uMXsm1ibJQqGhbfrWOSTg9U0G4-St94tdL1DU5ccDHmP5EBu3MIIFj4W-RKtrSRda7uCYlfSGwqjT~gBds1H117BWQA32IRX-IGGR6awBhj2XwttRnQF59o4q3Y0VNDTymEnsuRpDY8XnOWwkyBIFJu10-d440xD2hY4CL~SmfuXSyq8wpLviRFxmTpWNXd613g0atL3zbRAfCOW7LPiA6CoHY-J2vvxGwsC-q5l7ELzgJfar4HN0AIsFsiHT9Eso8OGZqnhxKZeqo-pnpZQ__"
+                alt="Event Update Logo"
+                className="h-full w-auto object-contain mix-blend-multiply"
+              />
         </NavLink>
 
         {/* Navigation Links */}
@@ -104,7 +118,7 @@ const Navbar = () => {
       <div
         className={`${
           showProfileMenu ? "block" : "hidden"
-        } absolute top-[55px] right-[55px] z-10 flex flex-col gap-3 p-5 border rounded-md bg-gradient-to-r from-purple-600 to-blue-500 p-6 text-gray-200 rounded-2xl shadow-2xl backdrop-blur-md bg-opacity-80`}
+        } absolute top-[70px] right-[55px] z-50 flex flex-col gap-3 p-5 border rounded-md bg-gradient-to-r from-purple-600 to-blue-500 p-6 text-gray-200 rounded-2xl shadow-2xl backdrop-blur-md bg-opacity-80`}
         onMouseEnter={() => setShowProfilMenu(true)}
         onMouseLeave={() => setShowProfilMenu(false)}
       >

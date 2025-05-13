@@ -57,6 +57,13 @@ const Cards = () => {
             }}
           >
             <div className="flex flex-col gap-4 items-center justify-between bg-white p-6 rounded-lg shadow-lg max-w-xs w-full mx-auto">
+              <div
+                className={`border px-3 py-1 absolute border-b-2 bg-red-300 rounded-full text-sm ${
+                  index === 1 ? "block" : "hidden"
+                }`}
+              >
+                Upcoming
+              </div>
               <img
                 src={
                   index === 0
@@ -71,8 +78,9 @@ const Cards = () => {
                   {index === 0 ? "Hackathons" : "Events"}
                 </h3>
                 <p className="text-sm text-gray-600 text-center px-2">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Unde, ratione.
+                  {index === 0
+                    ? "Join hackathons to test your skills, build solutions, and connect with tech enthusiasts!"
+                    : "Join tech events to learn, collaborate, and grow with innovators!"}
                 </p>
                 <div className="flex flex-col gap-2 w-full mt-2">
                   <button
