@@ -10,65 +10,52 @@ const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/userModel");
 const userRouter = require("./Routes/user.routes");
 const hackRouter = require("./Routes/hackathon");
-const MongoStore = require("connect-mongo")
+const MongoStore = require("connect-mongo");
 
-const allowedOrigins = [
-  "https://vent-frontend.onrender.com",
-  "http://localhost:5173" 
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true); 
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true, 
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
-  allowedHeaders: ["Content-Type", "Authorization"], 
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.use(
+  cors({
+    origin: "https://vent-frontend.onrender.com",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  store: new MongoStore({
-    mongoUrl: process.env.MONGO_URI,
-    ttl: 14 * 24 * 60 * 60
-  }),
-  cookie: {
-    httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}));
-
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({
+      mongoUrl: process.env.MONGO_URI,
+      ttl: 14 * 24 * 60 * 60,
+    }),
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
 
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use("/api/user", userRouter);
 app.use("/api/hack", hackRouter);
 
-app.get('/protected', (req, res) => {
+app.get("/protected", (req, res) => {
   if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: 'Not authenticated' });
+    return res.status(401).json({ message: "Not authenticated" });
   }
-  res.json({ message: 'Profile data', user: req.user });
+  res.json({ message: "Profile data", user: req.user });
 });
 app.listen(3000, (req, res) => {
   console.log("Port is connected to 3000");
