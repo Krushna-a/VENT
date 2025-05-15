@@ -8,7 +8,7 @@ const { ObjectId } = mongoose.Types;
 
 const getProfile = async (req, res) => {
   try {
-    const userId = req.user._id; // The logged-in user's ID
+    const userId = req.user._id; 
     const profile = await Profile.findOne({ userId: userId });
     
     if (!profile) {
@@ -55,7 +55,6 @@ const editProfile = async (req, res) => {
       email,
       userId,
     };
-    console.log(imageUrl);
     if (imageUrl) {
       profileDetails = { ...profileDetails, profileImage: imageUrl };
     }
@@ -72,8 +71,6 @@ const editProfile = async (req, res) => {
         { new: true }
       );
 
-      console.log(updatedProfile);
-
       if (!updatedProfile) {
         console.log("Profile not found");
         return res.status(400);
@@ -84,7 +81,6 @@ const editProfile = async (req, res) => {
 
       const result = await newProfile.save();
 
-      console.log(result);
       return res.status(201).json(result);
     }
   } catch (error) {

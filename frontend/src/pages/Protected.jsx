@@ -4,10 +4,9 @@ import axios from "axios";
 const Protected = () => {
   const fetchProtectedData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/protected", {
+      const response = await axios.get("https://vent-hyfi.onrender.com/protected", {
         withCredentials: true, // Important to send session cookie
       });
-      console.log(response.data); // Should include req.user and message
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
     }

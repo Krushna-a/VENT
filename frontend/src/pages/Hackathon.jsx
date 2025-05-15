@@ -52,16 +52,14 @@ const Hackathon = () => {
   const cancelRegister = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/hack/cancel",
+        "https://vent-hyfi.onrender.com/api/hack/cancel",
         { hackId }, // Send as an object
         {
           withCredentials: true,
         }
       );
-      console.log(res)
       notify(res.data)
       SetIsRegisteredToHack(false)
-      console.log(isRegisteredToHack)
     } catch (error) {
       console.log(error)
     }
@@ -78,7 +76,7 @@ const Hackathon = () => {
   const getData = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/hack/getIndividualHack/${hackId}`
+        `https://vent-hyfi.onrender.com/api/hack/getIndividualHack/${hackId}`
       );
       setHackData(data);
       setHackTimeline(data.timeline);

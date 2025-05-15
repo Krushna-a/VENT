@@ -63,7 +63,7 @@ const HostHack = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/hack/new",
+        "https://vent-hyfi.onrender.com/api/hack/new",
         dataToSend,
         {
           headers: {
@@ -72,7 +72,6 @@ const HostHack = () => {
           withCredentials: true,
         }
       );
-      console.log("Hackathon added:", res.data);
       notify(res.data)
       if(res.data){
         navigate('/Hackathons');

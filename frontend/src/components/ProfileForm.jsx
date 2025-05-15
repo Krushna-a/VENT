@@ -17,22 +17,18 @@ const ProfileForm = ({ showEditForm = true }) => {
   const { hackId } = useParams();
 
   const handleSubmit = async (e) => {
-    console.log("not refreshed");
     e.preventDefault();
-    console.log("refreshed");
 
     if (hackId) {
-      console.log(hackId);
 
       const res = await axios.post(
-        "http://localhost:3000/api/hack/register",
-        { hackId }, // Send as an object
+        "https://vent-hyfi.onrender.com/api/hack/register",
+        { hackId }, 
         {
           withCredentials: true,
         }
       );
 
-      console.log(res.data);
       notify(res.data.message);
       navigate(`/hackathons/${hackId}`);
     } else {
@@ -47,7 +43,7 @@ const ProfileForm = ({ showEditForm = true }) => {
       };
 
       const res = await axios.post(
-        "http://localhost:3000/api/user/profile",
+        "https://vent-hyfi.onrender.com/api/user/profile",
         profileData,
         {
           withCredentials: true,
@@ -57,7 +53,6 @@ const ProfileForm = ({ showEditForm = true }) => {
         }
       );
 
-      console.log(res.data);
       notify(res.data.message);
     }
   };

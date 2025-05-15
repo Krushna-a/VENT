@@ -6,7 +6,7 @@ const Hackathons = () => {
   const [allHacks, setAllHacks] = useState([]);
   const getHacks = async () => {
     const response = await axios.get(
-      "http://localhost:3000/api/hack/getHackathon"
+      "https://vent-hyfi.onrender.com/api/hack/getHackathon"
     );
     setAllHacks(response.data);
   };
@@ -14,7 +14,7 @@ const Hackathons = () => {
     getHacks();
   }, []);
   return (
-    <div className="w-[100vw] min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-10 px-4 md:px-10 flex flex-col items-center gap-2 pt-28">
+    <div className="w-[100vw] min-h-screen overflow-x-hidden bg-gradient-to-br from-blue-50 to-purple-50 py-10 px-4 md:px-10 flex flex-col items-center gap-2 pt-28">
       {allHacks.map((hack) => (
         <Hacks hackathon={hack}></Hacks>
       ))}

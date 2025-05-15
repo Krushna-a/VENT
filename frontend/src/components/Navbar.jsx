@@ -22,7 +22,6 @@ const Navbar = () => {
       document.body.style.overflow = 'unset';
     }
 
-    // Cleanup function to reset overflow when component unmounts
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -65,7 +64,6 @@ const Navbar = () => {
           className="block sm:hidden"
           onClick={() => {
             setSideBar(true);
-            console.log(sideBar);
           }}
         >
           <FontAwesomeIcon icon={faBars} />
