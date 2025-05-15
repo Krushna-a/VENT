@@ -12,12 +12,26 @@ const userRouter = require("./Routes/user.routes");
 const hackRouter = require("./Routes/hackathon");
 const MongoStore = require("connect-mongo")
 
-app.use(cors({
-  origin: 'https://vent-frontend.onrender.com',
+const allowedOrigins = [
+  "https://vent-frontend.onrender.com",
+  "http://localhost:5173" 
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true); 
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true, 
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+  allowedHeaders: ["Content-Type", "Authorization"], 
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
