@@ -12,12 +12,12 @@ const userRouter = require("./Routes/user.routes");
 const hackRouter = require("./Routes/hackathon");
 const MongoStore = require("connect-mongo")
 
-app.use(cors({
-  origin: 'https://vent-frontend.onrender.com',
-  credentials: true, 
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// app.use(cors({
+//   origin: 'https://vent-frontend.onrender.com',
+//   credentials: true, 
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
