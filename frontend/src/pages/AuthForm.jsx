@@ -39,21 +39,19 @@ const AuthForm = () => {
     const registerationCredentials = { username, email, password };
     if (isLogin) {
       const response = await axios.post(
-        "http://localhost:3000/api/user/login",
+        "https://vent-hyfi.onrender.com/api/user/login",
         loginCredentials,
         { withCredentials: true }
       );
-      console.log(response);
       notify(response.data.message)
       // localStorage.setItem("token", response.data.token);
       localStorage.setItem("user-id", response.data.user.id);
     } else {
       const response = await axios.post(
-        "http://localhost:3000/api/user/register",
+        "https://vent-hyfi.onrender.com/api/user/register",
         registerationCredentials,
         { withCredentials: true }
       );
-      console.log(response);
       notify(response.data.message)
     }
   };

@@ -6,7 +6,7 @@ const Hacks = ({ hackathon }) => {
   const date = new Date(hackathon.registrationDeadline);
   return (
     <Link to={`/hackathons/${hackathon._id}`} >
-      <div className="lg:w-[100%] p-5 flex flex-col sm:flex-row gap-8 border rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 bg-white">
+      <div className="w-[80rem] p-5 flex flex-col sm:flex-row gap-8 border rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 bg-white">
         {/* Image Section */}
         <img
           src={hackathon.bannerImage}

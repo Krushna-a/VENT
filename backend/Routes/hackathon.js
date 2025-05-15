@@ -3,8 +3,7 @@ const hackRouter = express.Router();
 const { addHackathon, getHackathon,getIndividualHack,hackRegister,cancelRegister } = require("../Controllers/hackController");
 const { storage } = require("../config/config");
 const multer = require("multer");
-// const upload = multer({ storage, limits: { fieldSize: 10 * 1024 * 1024 } });
-const upload = multer({ dest: "uploads/" });
+const upload = multer({storage});
 
 hackRouter.post("/new", upload.single("bannerImage"), addHackathon);
 hackRouter.get("/getHackathon",getHackathon)

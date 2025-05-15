@@ -5,7 +5,6 @@ const User = require("../models/userModel");
 const hackRegister = async (req, res) => {
   const { hackId } = req.body;
   const userId = req.user._id;
-  console.log(userId);
 
   const hack = await Hackathon.findById(hackId);
   const exists = hack.users.some((item) =>{
@@ -27,12 +26,10 @@ const hackRegister = async (req, res) => {
 const cancelRegister = async (req, res) => {
   try {
     const { hackId } = req.body;
-    console.log("hackId:", hackId);
     const userId = req.user._id;
 
     const user = await User.findById(userId);
     const newHacks = user.hacks.filter((item) => {
-      console.log("hack", item);
       return item.toString() !== hackId;
     });
     user.hacks = newHacks;
@@ -40,7 +37,6 @@ const cancelRegister = async (req, res) => {
 
     const hack = await Hackathon.findById(hackId);
     const newUsers = hack.users.filter((item) => {
-      console.log("user", item);
       return item.toString() !== userId.toString();
     });
     hack.users = newUsers;
@@ -55,9 +51,7 @@ const cancelRegister = async (req, res) => {
 
 const getIndividualHack = async (req, res) => {
   const hackId = req.params.hackId;
-  console.log(hackId);
   const response = await Hackathon.findById(hackId);
-  console.log(response);
   res.status(200).send(response);
 };
 const getHackathon = async (req, res) => {

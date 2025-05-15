@@ -21,7 +21,7 @@ const Profile = () => {
 
   const [showEditForm, setShowEditForm] = useState(false);
   const userProfile = async () => {
-    const data = await axios.get("http://localhost:3000/api/user/profile", {
+    const data = await axios.get("https://vent-hyfi.onrender.com/api/user/profile", {
       withCredentials: true,
     });
 
@@ -49,7 +49,7 @@ const Profile = () => {
     }
 
     const response = await axios.post(
-      "http://localhost:3000/api/user/profile",
+      "https://vent-hyfi.onrender.com/api/user/profile",
       profileData,
       {
         withCredentials: true,
