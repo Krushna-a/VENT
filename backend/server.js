@@ -16,6 +16,7 @@ app.use(
   cors({
     origin: "https://vent-frontend.onrender.com",
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
