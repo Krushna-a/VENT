@@ -3,7 +3,12 @@ const passport = require("passport");
 const userRouter = express.Router();
 const { storage } = require("../config/config");
 const multer = require("multer");
+<<<<<<< HEAD
 const upload = multer({storage});
+=======
+// const upload = multer({ storage, limits: { fieldSize: 10 * 1024 * 1024 } });
+const upload = multer({ storage });
+>>>>>>> 243f019650f1478e5b5451ec45e905264520c472
 const {
   loginUser,
   registerUser,
