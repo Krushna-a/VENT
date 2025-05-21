@@ -4,6 +4,7 @@ const User = require("../models/userModel");
 
 const hackRegister = async (req, res) => {
   const { hackId } = req.body;
+  console.log(req.user)
   const userId = req.user._id;
 
   const hack = await Hackathon.findById(hackId);
